@@ -1,0 +1,33 @@
+{
+  "name": "receiveText",
+  "handler": "nexmo/receiveText/handler.handler",
+  "timeout": 6,
+  "memorySize": 1024,
+  "custom": {
+    "excludePatterns": [],
+    "envVars": []
+  },
+  "endpoints": [{
+    "path": "nexmo/receiveText",
+    "method": "GET",
+    "authorizationType": "none",
+    "apiKeyRequired": false,
+    "requestParameters": {},
+    "requestTemplates": {
+      "application/json": "{\"queryParams\": { #foreach($param in $input.params().querystring.keySet()) \"$param\": \"$util.escapeJavaScript($input.params().querystring.get($param))\" #if($foreach.hasNext),#end #end}}"
+    },
+    "responses": {
+      "400": {
+        "statusCode": "400"
+      },
+      "default": {
+        "statusCode": "200",
+        "responseParameters": {},
+        "responseModels": {},
+        "responseTemplates": {
+          "application/json": ""
+        }
+      }
+    }
+  }]
+}

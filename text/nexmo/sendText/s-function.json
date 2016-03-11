@@ -1,0 +1,33 @@
+{
+  "name": "sendText",
+  "handler": "nexmo/sendText/handler.handler",
+  "timeout": 6,
+  "memorySize": 1024,
+  "custom": {
+    "excludePatterns": [],
+    "envVars": []
+  },
+  "endpoints": [{
+    "path": "nexmo/sendText",
+    "method": "POST",
+    "authorizationType": "none",
+    "apiKeyRequired": false,
+    "requestParameters": {},
+    "requestTemplates": {
+      "application/x-www-form-urlencoded": "## convert HTTP POST data to JSON for insertion directly into a Lambda function\n \n## first we we set up our variable that holds the tokenised key value pairs\n#set($httpPost = $input.path('$').split(\"&\"))\n \n## next we set up our loop inside the output structure\n{\n#foreach( $kvPair in $httpPost )\n ## now we tokenise each key value pair using \"=\"\n #set($kvTokenised = $kvPair.split(\"=\"))\n ## finally we output the JSON for this pair and add a \",\" if this isn't the last pair\n \"$kvTokenised[0]\" : \"$util.urlDecode($kvTokenised[1])\"#if( $foreach.hasNext ),#end\n#end\n}"
+    },
+    "responses": {
+      "400": {
+        "statusCode": "400"
+      },
+      "default": {
+        "statusCode": "200",
+        "responseParameters": {},
+        "responseModels": {},
+        "responseTemplates": {
+          "application/json": ""
+        }
+      }
+    }
+  }]
+}
